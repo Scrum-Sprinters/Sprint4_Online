@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empresas</title>
+    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+</head>
+
+<body class="bg-white dark:bg-gray-800">
+<!-- navbar-->
+<navbar th:replace="fragments/header_footer::navbar_empresas">
+    viene desde otro archivo
+</navbar>
+<!-- container general del contenido-->
+<div class="px-6 dark:bg-gray-900 dark:text-gray-400 h-screen">
+
+    <!-- TITULO GRANDE-->
+    <div th:replace="fragments/header_footer::titulo_app"> viene desde otro archivo</div>
+    <!-- BOTON DE NUEVO--   solo disponible si es administrador -->
+    <button data-modal-toggle="new-element-modal"
+            class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
+        Nueva empresa
+        <svg class="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                  clip-rule="evenodd"></path>
+        </svg>
+    </button>
+
+
+    <!-- TABLA EMPRESAS-->
+    <div class="py-6"></div>
+    <div class=" relative shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="py-3 px-6">
+                    Nombre
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Nit
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Telefono
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Dirección
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Empleados
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Transacciones
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Acciones
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="empresa :${empresas}"
+                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700  hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th th:text="${empresa.nombre}" scope="row"
+                        class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Nombre compañia
+                    </th>
+                <td th:text="${empresa.nit}" class="py-4 px-6">
+                    Numero de nit
+                </td>
+                <td th:text="${empresa.telefono}" class="py-4 px-6">
+                    Numero de telefono
+                </td>
+                <td th:text="${empresa.direccion}" class="py-4 px-6">
+                    Numero de telefono
+                </td>
+                <td th:text="${empresa.empleados.size()}" class="py-4 px-6">
+                    # Cantidad de trabajadores
+                </td>
+                <td th:text="${empresa.movimientoDineros.size()}" class="py-4 px-6">
+                    # de transacciones
+                </td>
+                <td class="py-4 px-6">
+                    <div class="flex items-center justify-between ">
+                        <a th:href="@{enterprises/{id}/movements (id=${empresa.id})}" type="button"
+                           class="font-medium text-blue-600 dark:text-green-500 hover:underline">Transacciones</a>
+                        <a th:href="@{enterprises/{id}(id=${empresa.id})}" type="button"
+                           class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Editar</a>
+                        <form method="post" th:action="@{enterprises/{id}/delete (id=${empresa.id})}">
+                        <button  type="submit"
+                           class="font-medium text-red-600 dark:text-red-500 hover:underline">Remover</button>
+                        </form>
+                    </div>
+
+                </td>
+
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+
+    <!--MODAL NUEVA EMPRESA -->
+    <div id="new-element-modal" tabindex="-1" aria-hidden="true"
+         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+        <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <button type="button"
+                        class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                        data-modal-toggle="new-element-modal">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                              clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+                <div class="py-6 px-6 lg:px-8">
+                    <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Ingresa los datos de la nueva
+                        empresa</h3>
+
+                    <form class="space-y-6" method="POST" th:action="@{/enterprises}" th:object="${nuevaEmpresa}">
+                        <div>
+                            <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nombre</label>
+                            <input type="text" th:field="*{nombre}" id="nombre"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                   placeholder="Scrum Sprinters" required>
+                        </div>
+                        <div>
+                            <label for="nit"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nit</label>
+                            <input type="number" th:field="*{nit}" id="nit"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                   placeholder="10987623" required>
+                        </div>
+
+                        <div>
+                            <label for="telefono"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Telefono</label>
+                            <input type="text" th:field="*{telefono}" id="telefono"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                   placeholder="57980765" required>
+                        </div>
+
+                        <div>
+                            <label for="direccion"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Dirección</label>
+                            <input type="text" th:field="*{direccion}" id="direccion"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                   placeholder="Calle X con Carrera Y" required>
+                        </div>
+
+                        <button type="submit"
+                                class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            Registrar Empresa
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- FOOTER-->
+
+<footer th:replace="fragments/header_footer::footer">
+    viene desde otro archivo
+</footer>
+<script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
+</body>
+
+</html>
